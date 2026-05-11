@@ -32,6 +32,16 @@ public class EntryWindow extends JFrame {
     private final Runnable  onSaved;     // může být null
     private final Entry     editing;     // null = nový zápis
 
+    /**
+     * Voláno při definitivním uzavření okna (uložení nebo zrušení),
+     * ale NE při přechodu na jiný den (jumpToDay).
+     * Nastaví volající okno (rodič), aby se znovu zobrazilo.
+     */
+    private Runnable onFinished;
+
+    /** Nastaví callback volaný při definitivním zavření tohoto řetězce oken. */
+    public void setOnFinished(Runnable r) { this.onFinished = r; }
+
     private final JTextField titleField = Style.inputField();
     private final JTextArea  textArea   = Style.textArea();
     private final JLabel     preview    = new JLabel();
@@ -113,8 +123,11 @@ public class EntryWindow extends JFrame {
     }
 
     private void jumpToDay(LocalDate target) {
+        EntryWindow next = new EntryWindow(target, onSaved);
+        // předáme onFinished dál – rodičovské okno se zobrazí až na konci řetězce
+        next.setOnFinished(onFinished);
         dispose();
-        new EntryWindow(target, onSaved).setVisible(true);
+        next.setVisible(true);
     }
 
     // ───────────── CENTER (text + náhled obrázku) ─────────────
@@ -225,7 +238,7 @@ public class EntryWindow extends JFrame {
     /** Zmenší obrázek tak, aby se vešel do daných rozměrů a zachoval poměr stran. */
     static Image scaleToFit(BufferedImage src, int maxW, int maxH) {
         double scale = Math.min((double) maxW / src.getWidth(),
-                                (double) maxH / src.getHeight());
+                (double) maxH / src.getHeight());
         int w = (int) Math.round(src.getWidth() * scale);
         int h = (int) Math.round(src.getHeight() * scale);
         return src.getScaledInstance(Math.max(1, w), Math.max(1, h), Image.SCALE_SMOOTH);
@@ -240,7 +253,10 @@ public class EntryWindow extends JFrame {
         JButton cancel = Style.secondaryButton("Zavřít");
         JButton save   = Style.primaryButton(editing == null ? "Uložit zápis" : "Uložit změny");
 
-        cancel.addActionListener(e -> dispose());
+        cancel.addActionListener(e -> {
+            if (onFinished != null) onFinished.run();
+            dispose();
+        });
         save.addActionListener(e -> doSave());
 
         footer.add(cancel);
@@ -261,7 +277,7 @@ public class EntryWindow extends JFrame {
         if (editing != null) {
             // úprava: zachováme původní ID a čas, jen prohodíme texty a obrázek
             entry = new Entry(editing.getId(), t, textArea.getText(),
-                              editing.getDateTime(), selectedImage);
+                    editing.getDateTime(), selectedImage);
         } else {
             // nový: dnes získá aktuální čas, jinak začátek vybraného dne
             LocalDateTime dt = day.equals(LocalDate.now())
@@ -273,6 +289,7 @@ public class EntryWindow extends JFrame {
         FileStorage.saveEntry(entry);
 
         if (onSaved != null) onSaved.run();
+        if (onFinished != null) onFinished.run();
         dispose();
     }
 }

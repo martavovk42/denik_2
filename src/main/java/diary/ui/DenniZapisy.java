@@ -156,12 +156,17 @@ public class DenniZapisy extends JFrame {
         actions.setBorder(new EmptyBorder(10, 0, 0, 0));
 
         JButton edit = Style.secondaryButton("Upravit");
-        edit.addActionListener(ev ->
-                new EntryWindow(e, () -> {
-                    if (onChanged != null) onChanged.run();
-                    refresh();
-                }).setVisible(true)
-        );
+        edit.addActionListener(ev -> {
+            EntryWindow ew = new EntryWindow(e, () -> {
+                if (onChanged != null) onChanged.run();
+            });
+            ew.setOnFinished(() -> {
+                refresh();
+                setVisible(true);
+            });
+            setVisible(false);
+            ew.setVisible(true);
+        });
 
         JButton del = Style.secondaryButton("Smazat");
         del.setForeground(Style.DANGER);
