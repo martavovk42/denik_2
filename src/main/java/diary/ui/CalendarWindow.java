@@ -238,7 +238,7 @@ public class CalendarWindow extends JFrame {
 
         DayCell cell = new DayCell(date.getDayOfMonth(), count, hasPhotos, isToday);
         cell.addActionListener(e ->
-                new DenniZapisy(date, this::render).setVisible(true));
+                new DenniZapisy(this, date, this::render).setVisible(true));
         return cell;
     }
 

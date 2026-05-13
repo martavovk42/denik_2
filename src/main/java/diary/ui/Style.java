@@ -159,7 +159,11 @@ public class Style {
     }
 
     /** Aplikuje pozadí, písmo a okraj na top-level kontejner. */
-    public static void decorateFrame(JFrame f) {
-        f.getContentPane().setBackground(BG);
+
+
+    public static void decorateFrame(Window f) {
+        if (f instanceof RootPaneContainer rpc) {
+            rpc.getContentPane().setBackground(BG);
+        }
     }
 }

@@ -13,40 +13,33 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.imageio.ImageIO;
 
-/**
- * Okno se všemi zápisy pro konkrétní den.
- * Otevírá se po kliknutí na den v kalendáři.
- *
- * - hezky vystylované karty
- * - obrázky zobrazené jako náhledy
- * - zápisy seřazené od nejstaršího k nejnovějšímu
- * - tlačítko "Přidej zápis" otevře EntryWindow pro tento den
- */
-public class DenniZapisy extends JFrame {
+public class DenniZapisy extends JDialog {
 
     private static final int IMG_MAX_W = 480;
     private static final int IMG_MAX_H = 320;
 
     private final LocalDate day;
-    private final Runnable onChanged;     // pro obnovu kalendáře
+    private final Runnable onChanged;
 
-    public DenniZapisy(LocalDate day, Runnable onChanged) {
+    public DenniZapisy(Frame owner, LocalDate day, Runnable onChanged) {
+        super(owner, true);
+
         this.day = day;
         this.onChanged = onChanged;
 
         setTitle("Zápisy – " + DateUtils.formatDay(day));
         setSize(640, 640);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(owner);
         setIconImage(Icons.calendarIcon(64));
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
         Style.decorateFrame(this);
         setLayout(new BorderLayout());
 
         add(buildHeader(), BorderLayout.NORTH);
-        add(buildList(),   BorderLayout.CENTER);
+        add(buildList(), BorderLayout.CENTER);
         add(buildFooter(), BorderLayout.SOUTH);
     }
-
     // ───────────── HEADER ─────────────
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
@@ -199,12 +192,17 @@ public class DenniZapisy extends JFrame {
         JButton add   = Style.accentButton("Přidej zápis");
 
         close.addActionListener(e -> dispose());
-        add.addActionListener(e ->
-                new EntryWindow(day, () -> {
-                    if (onChanged != null) onChanged.run();
-                    refresh();
-                }).setVisible(true)
-        );
+        add.addActionListener(ev -> {
+            EntryWindow ad = new EntryWindow(day, () -> {
+                if (onChanged != null) onChanged.run();
+            });
+            ad.setOnFinished(() -> {
+                refresh();
+                setVisible(true);
+            });
+            setVisible(false);
+            ad.setVisible(true);
+        });
 
         footer.add(close);
         footer.add(add);
