@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public class Style {
 
-    // 🎨 paleta - tlumená, ale barevná (krémová + zelená šalvěj + terakota)
+
     public static final Color BG           = new Color(0xF2FAF5);
     public static final Color SURFACE      = new Color(0xF7F8F8);
     public static final Color PRIMARY      = new Color(0x5B8D72);
