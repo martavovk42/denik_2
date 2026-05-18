@@ -9,7 +9,6 @@ import java.util.Set;
 
 /**
  * Centrální místo pro barvy, písma a styly tlačítek.
- * Cílem je jednotný a teplý vzhled napříč celou aplikací.
  */
 public class Style {
 

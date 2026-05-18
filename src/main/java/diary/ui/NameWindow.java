@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 
 /**
  * První spuštění - zeptáme se na jméno uživatele.
- * Stylizováno stejně jako ostatní okna.
  */
 public class NameWindow extends JFrame {
 

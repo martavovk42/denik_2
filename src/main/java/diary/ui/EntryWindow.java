@@ -32,11 +32,7 @@ public class EntryWindow extends JFrame {
     private final Runnable  onSaved;     // může být null
     private final Entry     editing;     // null = nový zápis
 
-    /**
-     * Voláno při definitivním uzavření okna (uložení nebo zrušení),
-     * ale NE při přechodu na jiný den (jumpToDay).
-     * Nastaví volající okno (rodič), aby se znovu zobrazilo.
-     */
+
     private Runnable onFinished;
 
     /** Nastaví callback volaný při definitivním zavření tohoto řetězce oken. */
