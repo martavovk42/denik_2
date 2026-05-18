@@ -175,9 +175,9 @@ public class EntryWindow extends JFrame {
         preview.setHorizontalAlignment(SwingConstants.CENTER);
         preview.setVerticalAlignment(SwingConstants.CENTER);
         preview.setPreferredSize(new Dimension(PREVIEW_W, PREVIEW_H));
-        preview.setBackground(Theme.SURFACE());
+        preview.setBackground(theme.SURFACE());
         preview.setOpaque(true);
-        preview.setForeground(Theme.TEXT_MUTED());
+        preview.setForeground(theme.TEXT_MUTED());
         preview.setFont(Theme.FONT_SMALL);
         preview.setBorder(BorderFactory.createDashedBorder(theme.BORDER(), 1.5f, 4f, 4f, true));
         renderPreview();

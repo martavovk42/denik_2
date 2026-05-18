@@ -34,21 +34,6 @@ public interface Theme {
      Font FONT_BIG     = new Font(FONT_NAME, Font.BOLD, 20);
      Font FONT_HUGE    = new Font(FONT_NAME, Font.BOLD, 28);
 
-    default void applyHover(JComponent c, Color normalBg, Color hoverBg, Color normalFg, Color hoverFg) {
-        c.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                c.setBackground(hoverBg);
-                c.setForeground(hoverFg);
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                c.setBackground(normalBg);
-                c.setForeground(normalFg);
-            }
-        });
-    }
 
     private static String pickFont() {
         String[] preferred = {
@@ -214,7 +199,7 @@ public interface Theme {
     }
 
 
-    public class Twilight implements Theme {
+    class Twilight implements Theme {
         @Override public Color BG()           { return new Color(0x000000); }
         @Override public Color SURFACE()      { return new Color(0x201B49); }
         @Override public Color PRIMARY()      { return new Color(0x5D53C1); }
@@ -254,8 +239,7 @@ public interface Theme {
 
         }
 
-
-    public class Green implements Theme{
+        class Green implements Theme{
 
 
         @Override  public Color BG()           { return new Color(0xF2FAF5); }
@@ -295,7 +279,7 @@ public interface Theme {
     }
 
 
-    public class Pink implements Theme{
+     class Pink implements Theme{
 
 
         @Override public Color BG()           { return new Color(0xF2FAF5); }
