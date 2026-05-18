@@ -152,32 +152,92 @@ public class CalendarWindow extends JFrame {
     // ───────────── výběr měsíce/roku ─────────────
     private void pickMonthYear() {
         String[] months = new String[12];
-        for (int i = 0; i < 12; i++) months[i] = DateUtils.mesic(i + 1);
+        for (int i = 0; i < 12; i++) {
+            months[i] = DateUtils.mesic(i + 1);
+        }
+
         JComboBox<String> monthCb = new JComboBox<>(months);
         monthCb.setSelectedIndex(currentMonth.getMonthValue() - 1);
         monthCb.setFont(Style.FONT_REG);
+        monthCb.setBackground(Color.WHITE);
+        monthCb.setBorder(BorderFactory.createLineBorder(Style.BORDER));
 
         int yearNow = Year.now().getValue();
         List<Integer> years = new ArrayList<>();
-        for (int y = yearNow - 10; y <= yearNow + 10; y++) years.add(y);
-        JComboBox<Integer> yearCb = new JComboBox<>(years.toArray(new Integer[0]));
+
+        for (int y = yearNow - 10; y <= yearNow + 10; y++) {
+            years.add(y);
+        }
+
+        JComboBox<Integer> yearCb =
+                new JComboBox<>(years.toArray(new Integer[0]));
+
         yearCb.setSelectedItem(currentMonth.getYear());
         yearCb.setFont(Style.FONT_REG);
+        yearCb.setBackground(Color.WHITE);
+        yearCb.setBorder(BorderFactory.createLineBorder(Style.BORDER));
 
-        JPanel panel = new JPanel(new GridLayout(2, 2, 8, 8));
+        // ===== hlavní panel =====
+        JPanel panel = new JPanel(new BorderLayout(0, 16));
         panel.setBackground(Style.BG);
-        panel.setBorder(new EmptyBorder(8, 8, 8, 8));
-        panel.add(new JLabel("Měsíc:"));
-        panel.add(monthCb);
-        panel.add(new JLabel("Rok:"));
-        panel.add(yearCb);
+        panel.setBorder(new EmptyBorder(18, 20, 18, 20));
+        JPanel vrch = new JPanel(new BorderLayout(0,16));
+        JLabel title = new JLabel("Vyber měsíc a rok");
 
-        int res = JOptionPane.showConfirmDialog(this, panel, "Vyber měsíc a rok",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (res == JOptionPane.OK_OPTION) {
+        title.setFont(Style.FONT_BIG);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setVerticalAlignment(SwingConstants.CENTER);
+        title.setForeground(Style.TEXT);
+        vrch.setOpaque(true);
+        vrch.setBackground(Style.PRIMARY);
+        vrch.add(title, BorderLayout.CENTER);
+        panel.add(vrch, BorderLayout.NORTH);
+        // ===== formulář =====
+
+        JPanel form = new JPanel(new GridLayout(2, 2, 12, 12));
+        form.setOpaque(false);
+
+        JLabel monthLbl = new JLabel("Měsíc");
+        monthLbl.setFont(Style.FONT_BOLD);
+        monthLbl.setForeground(Style.TEXT_MUTED);
+
+        JLabel yearLbl = new JLabel("Rok");
+        yearLbl.setFont(Style.FONT_BOLD);
+        yearLbl.setForeground(Style.TEXT_MUTED);
+
+        form.add(monthLbl);
+        form.add(monthCb);
+
+        form.add(yearLbl);
+        form.add(yearCb);
+
+        panel.add(form, BorderLayout.CENTER);
+
+        // ===== vlastní tlačítka =====
+
+        JButton okBtn = Style.primaryButton("OK");
+        JButton cancelBtn = Style.secondaryButton("Zrušit");
+
+        Object[] options = {okBtn, cancelBtn};
+
+        int res = JOptionPane.showOptionDialog(
+                this,
+                panel,
+                "Vyber měsíc a rok",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                okBtn
+        );
+
+        if (res == 0) {
+
             int m = monthCb.getSelectedIndex() + 1;
             int y = (Integer) yearCb.getSelectedItem();
+
             currentMonth = LocalDate.of(y, m, 1);
+
             render();
         }
     }

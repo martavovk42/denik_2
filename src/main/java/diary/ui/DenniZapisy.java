@@ -170,13 +170,29 @@ public class DenniZapisy extends JFrame {
 
         JButton del = Style.secondaryButton("Smazat");
         del.setForeground(Style.DANGER);
+
         del.addActionListener(ev -> {
-            int res = JOptionPane.showConfirmDialog(this,
+
+            Object[] options = {"Ano", "Ne"};
+
+            int res = JOptionPane.showOptionDialog(
+                    this,
                     "Smazat zápis \"" + e.getTitle() + "\"?",
-                    "Smazat zápis", JOptionPane.YES_NO_OPTION);
-            if (res == JOptionPane.YES_OPTION) {
+                    "Smazat zápis",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
+
+            if (res == 0) {
                 FileStorage.deleteEntry(e);
-                if (onChanged != null) onChanged.run();
+
+                if (onChanged != null) {
+                    onChanged.run();
+                }
+
                 refresh();
             }
         });
