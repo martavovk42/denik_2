@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public interface Theme {
-    Theme theme = new Twilight();
+    Theme theme = new Natural();
 
      Color BG()    ;
      Color SURFACE() ;
@@ -231,7 +231,7 @@ public interface Theme {
         @Override
         public Color ACCESIBILITY(int count, Color fg){
             int idx = Math.min(count - 1, gradient.length -1);
-            if (idx >= 3) fg = Color.WHITE;
+            if (idx >= 3) fg = Color.BLACK;
             return fg;
         }
 
@@ -239,28 +239,28 @@ public interface Theme {
 
         }
 
-        class Green implements Theme{
+        class Natural implements Theme{
 
 
-        @Override  public Color BG()           { return new Color(0xF2FAF5); }
-        @Override public Color SURFACE()      { return new Color(0xF7F8F8); }
-        @Override  public Color PRIMARY()      { return new Color(0x5B8D72); }
-        @Override public Color PRIMARY_DARK() { return new Color(0x3F6651); }
-        @Override  public Color ACCENT() { return new Color(0x2B6B46); }
+        @Override  public Color BG()           { return new Color(0xCFCDC3); }
+        @Override public Color SURFACE()      { return new Color(0xE1DFD5); }
+        @Override  public Color PRIMARY()      { return new Color(0x5B8D5C); }
+        @Override public Color PRIMARY_DARK() { return new Color(0x40663F); }
+        @Override  public Color ACCENT() { return new Color(0x2B6B2C); }
         @Override public Color ACCENT_TEXT()  { return new Color(0xF2FAF5); }
-        @Override public Color ACCENT_SOFT()  { return new Color(0xC1E8D2); }
+        @Override public Color ACCENT_SOFT()  { return new Color(0xC6E8C1); }
         @Override public Color TEXT()         { return new Color(0x2D2A32); }
         @Override public Color TEXT_MUTED()   { return new Color(0x6B6770); }
         @Override public Color BORDER()       { return new Color(0xD7E3E3); }
-        @Override  public Color TODAY()        { return new Color(0x2B6B46); }
+        @Override  public Color TODAY()        { return new Color(0x2B6B34); }
         @Override public Color DANGER()       { return new Color(0xB85450); }
 
         Color[] gradient = {
-                new Color(0xD0EAD3),
-                new Color(0xB6E6BC),
-                new Color(0x90DF9A),
-                new Color(0x5FB178),
-                new Color(0x53B17D)
+                new Color(0xD6EAD0),
+                new Color(0xB9E6B6),
+                new Color(0x95DF90),
+                new Color(0x78C673),
+                new Color(0x56B153)
         };
 
         @Override
