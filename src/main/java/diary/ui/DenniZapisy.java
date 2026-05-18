@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.imageio.ImageIO;
 
+import static diary.ui.Theme.theme;
+
 /**
  * Okno se všemi zápisy pro konkrétní den.
  * Otevírá se po kliknutí na den v kalendáři.
@@ -39,7 +41,7 @@ public class DenniZapisy extends JFrame {
         setLocationRelativeTo(null);
         setIconImage(Icons.calendarIcon(64));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Style.decorateFrame(this);
+        Theme.decorateFrame(this);
         setLayout(new BorderLayout());
 
         add(buildHeader(), BorderLayout.NORTH);
@@ -50,11 +52,11 @@ public class DenniZapisy extends JFrame {
     // ───────────── HEADER ─────────────
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(Style.PRIMARY);
+        header.setBackground(theme.PRIMARY());
         header.setBorder(new EmptyBorder(14, 20, 14, 20));
 
         JLabel title = new JLabel(DateUtils.formatDay(day));
-        title.setFont(Style.FONT_BIG);
+        title.setFont(Theme.FONT_BIG);
         title.setForeground(Color.WHITE);
         header.add(title, BorderLayout.WEST);
         return header;
@@ -66,13 +68,13 @@ public class DenniZapisy extends JFrame {
 
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setBackground(Style.BG);
+        container.setBackground(theme.BG());
         container.setBorder(new EmptyBorder(18, 20, 18, 20));
 
         if (entries.isEmpty()) {
             JLabel empty = new JLabel("Žádné zápisy pro tento den.", SwingConstants.CENTER);
-            empty.setFont(Style.FONT_MEDIUM);
-            empty.setForeground(Style.TEXT_MUTED);
+            empty.setFont(Theme.FONT_MEDIUM);
+            empty.setForeground(theme.TEXT_MUTED());
             empty.setAlignmentX(Component.CENTER_ALIGNMENT);
             empty.setBorder(new EmptyBorder(80, 0, 0, 0));
             container.add(empty);
@@ -88,16 +90,16 @@ public class DenniZapisy extends JFrame {
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
-        scroll.getViewport().setBackground(Style.BG);
+        scroll.getViewport().setBackground(theme.BG());
         return scroll;
     }
 
     private JPanel entryCard(Entry e) {
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setBackground(Style.SURFACE);
+        card.setBackground(theme.SURFACE());
         card.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Style.BORDER, 1, true),
+                BorderFactory.createLineBorder(theme.BORDER(), 1, true),
                 new EmptyBorder(14, 16, 14, 16)
         ));
         card.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -107,12 +109,12 @@ public class DenniZapisy extends JFrame {
         head.setOpaque(false);
 
         JLabel titleLbl = new JLabel(e.getTitle());
-        titleLbl.setFont(Style.FONT_BIG);
-        titleLbl.setForeground(Style.TEXT);
+        titleLbl.setFont(Theme.FONT_BIG);
+        titleLbl.setForeground(theme.TEXT());
 
         JLabel timeLbl = new JLabel(DateUtils.formatTime(e.getDateTime()));
-        timeLbl.setFont(Style.FONT_BOLD);
-        timeLbl.setForeground(Style.ACCENT);
+        timeLbl.setFont(Theme.FONT_BOLD);
+        timeLbl.setForeground(theme.ACCENT());
 
         head.add(titleLbl, BorderLayout.WEST);
         head.add(timeLbl,  BorderLayout.EAST);
@@ -123,9 +125,9 @@ public class DenniZapisy extends JFrame {
         // text
         if (e.getContent() != null && !e.getContent().isEmpty()) {
             JTextArea ta = new JTextArea(e.getContent());
-            ta.setFont(Style.FONT_REG);
-            ta.setForeground(Style.TEXT);
-            ta.setBackground(Style.SURFACE);
+            ta.setFont(Theme.FONT_REG);
+            ta.setForeground(theme.TEXT());
+            ta.setBackground(theme.SURFACE());
             ta.setEditable(false);
             ta.setLineWrap(true);
             ta.setWrapStyleWord(true);
@@ -155,7 +157,7 @@ public class DenniZapisy extends JFrame {
         actions.setOpaque(false);
         actions.setBorder(new EmptyBorder(10, 0, 0, 0));
 
-        JButton edit = Style.secondaryButton("Upravit");
+        JButton edit = theme.secondaryButton("Upravit");
         edit.addActionListener(ev -> {
             EntryWindow ew = new EntryWindow(e, () -> {
                 if (onChanged != null) onChanged.run();
@@ -168,8 +170,8 @@ public class DenniZapisy extends JFrame {
             ew.setVisible(true);
         });
 
-        JButton del = Style.secondaryButton("Smazat");
-        del.setForeground(Style.DANGER);
+        JButton del = theme.secondaryButton("Smazat");
+        del.setForeground(theme.DANGER());
         del.addActionListener(ev -> {
             int res = JOptionPane.showConfirmDialog(this,
                     "Smazat zápis \"" + e.getTitle() + "\"?",
@@ -192,11 +194,11 @@ public class DenniZapisy extends JFrame {
     // ───────────── FOOTER ─────────────
     private JPanel buildFooter() {
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 12));
-        footer.setBackground(Style.BG);
-        footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Style.BORDER));
+        footer.setBackground(theme.BG());
+        footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, theme.BORDER()));
 
-        JButton close = Style.secondaryButton("Zavřít");
-        JButton add   = Style.accentButton("Přidej zápis");
+        JButton close = theme.secondaryButton("Zavřít");
+        JButton add   = theme.accentButton("Přidej zápis");
 
         close.addActionListener(e -> dispose());
         add.addActionListener(e ->

@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+import static diary.ui.Theme.theme;
+
 /**
  * Loading/uvítací okno - zobrazí se při dalších spuštěních
  * a po krátké chvíli automaticky otevře kalendář.
@@ -21,9 +23,9 @@ public class WelcomeWindow extends JFrame {
         setIconImage(Icons.calendarIcon(64));
 
         JPanel root = new JPanel(new BorderLayout());
-        root.setBackground(Style.BG);
+        root.setBackground(theme.BG());
         root.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Style.PRIMARY, 2),
+                BorderFactory.createLineBorder(theme.PRIMARY(), 2),
                 new EmptyBorder(28, 32, 28, 32)
         ));
 
@@ -39,13 +41,13 @@ public class WelcomeWindow extends JFrame {
         center.setBorder(new EmptyBorder(18, 0, 0, 0));
 
         JLabel greet = new JLabel("Vítej zpět, " + name + "!", SwingConstants.CENTER);
-        greet.setFont(Style.FONT_BIG);
-        greet.setForeground(Style.TEXT);
+        greet.setFont(Theme.FONT_BIG);
+        greet.setForeground(theme.TEXT());
         greet.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel sub = new JLabel("Načítám tvůj deník…", SwingConstants.CENTER);
-        sub.setFont(Style.FONT_REG);
-        sub.setForeground(Style.TEXT_MUTED);
+        sub.setFont(Theme.FONT_REG);
+        sub.setForeground(theme.TEXT_MUTED());
         sub.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         center.add(greet);
@@ -56,9 +58,9 @@ public class WelcomeWindow extends JFrame {
         // progress bar
         JProgressBar bar = new JProgressBar(0, 100);
         bar.setValue(0);
-        bar.setForeground(Style.PRIMARY);
-        bar.setBackground(Style.SURFACE);
-        bar.setBorder(BorderFactory.createLineBorder(Style.BORDER, 1));
+        bar.setForeground(theme.PRIMARY());
+        bar.setBackground(theme.SURFACE());
+        bar.setBorder(BorderFactory.createLineBorder(theme.BORDER(), 1));
         bar.setPreferredSize(new Dimension(0, 8));
         bar.setStringPainted(false);
         root.add(bar, BorderLayout.SOUTH);

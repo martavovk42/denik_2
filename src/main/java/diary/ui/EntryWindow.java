@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.imageio.ImageIO;
 
+import static diary.ui.Theme.theme;
+
 /**
  * Okno pro nový nebo upravovaný zápis.
  *
@@ -38,8 +40,8 @@ public class EntryWindow extends JFrame {
     /** Nastaví callback volaný při definitivním zavření tohoto řetězce oken. */
     public void setOnFinished(Runnable r) { this.onFinished = r; }
 
-    private final JTextField titleField = Style.inputField();
-    private final JTextArea  textArea   = Style.textArea();
+    private final JTextField titleField = Theme.inputField();
+    private final JTextArea  textArea   = Theme.textArea();
     private final JLabel     preview    = new JLabel();
     private String           selectedImage;          // aktuálně vybraný obrázek
 
@@ -64,7 +66,7 @@ public class EntryWindow extends JFrame {
         setLocationRelativeTo(null);
         setIconImage(Icons.calendarIcon(64));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Style.decorateFrame(this);
+        Theme.decorateFrame(this);
         setLayout(new BorderLayout());
 
         add(buildHeader(),  BorderLayout.NORTH);
@@ -85,11 +87,11 @@ public class EntryWindow extends JFrame {
     // ───────────── HEADER s šipkami ─────────────
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(Style.PRIMARY);
+        header.setBackground(theme.PRIMARY());
         header.setBorder(new EmptyBorder(10, 16, 10, 16));
 
         JLabel dateLabel = new JLabel(DateUtils.formatDay(day), SwingConstants.CENTER);
-        dateLabel.setFont(Style.FONT_BIG);
+        dateLabel.setFont(Theme.FONT_BIG);
         dateLabel.setForeground(Color.WHITE);
         header.add(dateLabel, BorderLayout.CENTER);
 
@@ -107,9 +109,9 @@ public class EntryWindow extends JFrame {
 
     private JButton navButton(String txt) {
         JButton b = new JButton(txt);
-        b.setFont(new Font(Style.FONT_NAME, Font.BOLD, 18));
+        b.setFont(new Font(Theme.FONT_NAME, Font.BOLD, 18));
         b.setForeground(Color.WHITE);
-        b.setBackground(Style.PRIMARY);
+        b.setBackground(theme.PRIMARY());
         b.setBorder(new EmptyBorder(6, 14, 6, 14));
         b.setBorderPainted(false);
         b.setFocusPainted(false);
@@ -129,7 +131,7 @@ public class EntryWindow extends JFrame {
     // ───────────── CENTER (text + náhled obrázku) ─────────────
     private JPanel buildCenter() {
         JPanel center = new JPanel(new BorderLayout(16, 16));
-        center.setBackground(Style.BG);
+        center.setBackground(theme.BG());
         center.setBorder(new EmptyBorder(18, 20, 18, 20));
 
         // levá strana: titulek + text
@@ -138,21 +140,21 @@ public class EntryWindow extends JFrame {
         left.setLayout(new BoxLayout(left, BoxLayout.Y_AXIS));
 
         JLabel titleLbl = new JLabel("Titulek");
-        titleLbl.setFont(Style.FONT_BOLD);
-        titleLbl.setForeground(Style.TEXT_MUTED);
+        titleLbl.setFont(Theme.FONT_BOLD);
+        titleLbl.setForeground(theme.TEXT_MUTED());
         titleLbl.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         titleField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
         titleField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel textLbl = new JLabel("Text");
-        textLbl.setFont(Style.FONT_BOLD);
-        textLbl.setForeground(Style.TEXT_MUTED);
+        textLbl.setFont(Theme.FONT_BOLD);
+        textLbl.setForeground(theme.TEXT_MUTED());
         textLbl.setBorder(new EmptyBorder(12, 0, 4, 0));
         textLbl.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JScrollPane scroll = new JScrollPane(textArea);
-        scroll.setBorder(BorderFactory.createLineBorder(Style.BORDER));
+        scroll.setBorder(BorderFactory.createLineBorder(theme.BORDER()));
         scroll.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         left.add(titleLbl);
@@ -167,23 +169,23 @@ public class EntryWindow extends JFrame {
         right.setPreferredSize(new Dimension(PREVIEW_W + 20, 0));
 
         JLabel imgLbl = new JLabel("Obrázek");
-        imgLbl.setFont(Style.FONT_BOLD);
-        imgLbl.setForeground(Style.TEXT_MUTED);
+        imgLbl.setFont(Theme.FONT_BOLD);
+        imgLbl.setForeground(theme.TEXT_MUTED());
 
         preview.setHorizontalAlignment(SwingConstants.CENTER);
         preview.setVerticalAlignment(SwingConstants.CENTER);
         preview.setPreferredSize(new Dimension(PREVIEW_W, PREVIEW_H));
-        preview.setBackground(Style.SURFACE);
+        preview.setBackground(Theme.SURFACE());
         preview.setOpaque(true);
-        preview.setForeground(Style.TEXT_MUTED);
-        preview.setFont(Style.FONT_SMALL);
-        preview.setBorder(BorderFactory.createDashedBorder(Style.BORDER, 1.5f, 4f, 4f, true));
+        preview.setForeground(Theme.TEXT_MUTED());
+        preview.setFont(Theme.FONT_SMALL);
+        preview.setBorder(BorderFactory.createDashedBorder(theme.BORDER(), 1.5f, 4f, 4f, true));
         renderPreview();
 
         JPanel imgBtns = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         imgBtns.setOpaque(false);
-        JButton pick   = Style.secondaryButton("Vybrat…");
-        JButton remove = Style.secondaryButton("Odebrat");
+        JButton pick   = theme.secondaryButton("Vybrat…");
+        JButton remove = theme.secondaryButton("Odebrat");
         imgBtns.add(pick);
         imgBtns.add(remove);
 
@@ -243,11 +245,11 @@ public class EntryWindow extends JFrame {
     // ───────────── FOOTER s tlačítky ─────────────
     private JPanel buildFooter() {
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 12));
-        footer.setBackground(Style.BG);
-        footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Style.BORDER));
+        footer.setBackground(theme.BG());
+        footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, theme.BORDER()));
 
-        JButton cancel = Style.secondaryButton("Zavřít");
-        JButton save   = Style.primaryButton(editing == null ? "Uložit zápis" : "Uložit změny");
+        JButton cancel = theme.secondaryButton("Zavřít");
+        JButton save   = theme.primaryButton(editing == null ? "Uložit zápis" : "Uložit změny");
 
         cancel.addActionListener(e -> {
             if (onFinished != null) onFinished.run();

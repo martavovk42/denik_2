@@ -12,10 +12,14 @@ import java.io.File;
 import java.util.List;
 import javax.imageio.ImageIO;
 
+import static diary.ui.Theme.theme;
+
 /**
  * Výsledky hledání slov v zápisech.
  */
 public class SearchResults extends JFrame {
+
+
 
     private static final int IMG_MAX_W = 360;
     private static final int IMG_MAX_H = 240;
@@ -26,20 +30,20 @@ public class SearchResults extends JFrame {
         setLocationRelativeTo(null);
         setIconImage(Icons.calendarIcon(64));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Style.decorateFrame(this);
+        Theme.decorateFrame(this);
         setLayout(new BorderLayout());
 
         List<Entry> hits = FileStorage.search(query);
 
         // hlavička
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(Style.PRIMARY);
+        header.setBackground(theme.PRIMARY());
         header.setBorder(new EmptyBorder(14, 20, 14, 20));
         JLabel title = new JLabel("Výsledky pro \"" + query + "\"");
-        title.setFont(Style.FONT_BIG);
+        title.setFont(Theme.FONT_BIG);
         title.setForeground(Color.WHITE);
         JLabel cnt = new JLabel(hits.size() + " " + plural(hits.size()));
-        cnt.setFont(Style.FONT_REG);
+        cnt.setFont(Theme.FONT_REG);
         cnt.setForeground(new Color(255, 255, 255, 220));
         header.add(title, BorderLayout.WEST);
         header.add(cnt,   BorderLayout.EAST);
@@ -48,13 +52,13 @@ public class SearchResults extends JFrame {
         // obsah
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setBackground(Style.BG);
+        container.setBackground(theme.BG());
         container.setBorder(new EmptyBorder(18, 20, 18, 20));
 
         if (hits.isEmpty()) {
             JLabel empty = new JLabel("Nic se nenašlo.", SwingConstants.CENTER);
-            empty.setFont(Style.FONT_MEDIUM);
-            empty.setForeground(Style.TEXT_MUTED);
+            empty.setFont(Theme.FONT_MEDIUM);
+            empty.setForeground(theme.TEXT_MUTED());
             empty.setAlignmentX(Component.CENTER_ALIGNMENT);
             empty.setBorder(new EmptyBorder(80, 0, 0, 0));
             container.add(empty);
@@ -70,14 +74,14 @@ public class SearchResults extends JFrame {
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
-        scroll.getViewport().setBackground(Style.BG);
+        scroll.getViewport().setBackground(theme.BG());
         add(scroll, BorderLayout.CENTER);
 
         // patička
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 12));
-        footer.setBackground(Style.BG);
-        footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Style.BORDER));
-        JButton close = Style.secondaryButton("Zavřít");
+        footer.setBackground(theme.BG());
+        footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, theme.BORDER()));
+        JButton close = theme.secondaryButton("Zavřít");
         close.addActionListener(e -> dispose());
         footer.add(close);
         add(footer, BorderLayout.SOUTH);
@@ -86,9 +90,9 @@ public class SearchResults extends JFrame {
     private JPanel card(Entry e) {
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setBackground(Style.SURFACE);
+        card.setBackground(theme.SURFACE());
         card.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Style.BORDER, 1, true),
+                BorderFactory.createLineBorder(theme.BORDER(), 1, true),
                 new EmptyBorder(12, 14, 12, 14)
         ));
         card.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -96,12 +100,12 @@ public class SearchResults extends JFrame {
         JPanel head = new JPanel(new BorderLayout());
         head.setOpaque(false);
         JLabel t = new JLabel(e.getTitle());
-        t.setFont(Style.FONT_BIG);
-        t.setForeground(Style.TEXT);
+        t.setFont(Theme.FONT_BIG);
+        t.setForeground(theme.TEXT());
         JLabel d = new JLabel(DateUtils.formatDay(e.getDateTime().toLocalDate())
                 + " • " + DateUtils.formatTime(e.getDateTime()));
-        d.setFont(Style.FONT_SMALL);
-        d.setForeground(Style.ACCENT);
+        d.setFont(Theme.FONT_SMALL);
+        d.setForeground(theme.ACCENT());
         head.add(t, BorderLayout.WEST);
         head.add(d, BorderLayout.EAST);
         head.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -110,9 +114,9 @@ public class SearchResults extends JFrame {
 
         if (e.getContent() != null && !e.getContent().isEmpty()) {
             JTextArea ta = new JTextArea(e.getContent());
-            ta.setFont(Style.FONT_REG);
-            ta.setForeground(Style.TEXT);
-            ta.setBackground(Style.SURFACE);
+            ta.setFont(Theme.FONT_REG);
+            ta.setForeground(theme.TEXT());
+            ta.setBackground(theme.SURFACE());
             ta.setEditable(false);
             ta.setLineWrap(true);
             ta.setWrapStyleWord(true);

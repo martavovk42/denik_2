@@ -14,6 +14,8 @@ import java.time.Year;
 import java.util.*;
 import java.util.List;
 
+import static diary.ui.Theme.theme;
+
 /**
  * Hlavní okno aplikace - měsíční kalendář se zápisy.
  *
@@ -33,12 +35,12 @@ public class CalendarWindow extends JFrame {
         setLocationRelativeTo(null);
         setIconImage(Icons.calendarIcon(64));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Style.decorateFrame(this);
+        Theme.decorateFrame(this);
         setLayout(new BorderLayout());
         render();
     }
 
-    // ───────────── render ─────────────
+    // render
     private void render() {
         getContentPane().removeAll();
         setLayout(new BorderLayout());
@@ -50,30 +52,32 @@ public class CalendarWindow extends JFrame {
         repaint();
     }
 
-    // ───────────── horní panel ─────────────
+    // horní panel
     private JPanel buildTop() {
         JPanel top = new JPanel(new BorderLayout());
-        top.setBackground(Style.PRIMARY);
+        top.setBackground(theme.PRIMARY());
         top.setBorder(new EmptyBorder(12, 16, 12, 16));
 
-        // ── LEVÁ STRANA: vyhledávání ──
+        // LEVÁ STRANA: vyhledávání a menu
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         searchPanel.setOpaque(false);
 
+
+        JMenuBar menuBar = theme.menuBar();
+        JMenu nastaveni = theme.menu("☰");
+        JMenuItem themeitem = theme.menuItem("Téma");
+        menuBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+        menuBar.add(nastaveni);
+        nastaveni.add(themeitem);
+
         JTextField searchField = new JTextField(14);
-        searchField.setFont(Style.FONT_REG);
+        searchField.setFont(Theme.FONT_REG);
         searchField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Style.PRIMARY_DARK, 1, true),
+                BorderFactory.createLineBorder(theme.PRIMARY_DARK(), 1, true),
                 new EmptyBorder(6, 10, 6, 10)
         ));
 
-        JButton searchBtn = new JButton("Hledat");
-        searchBtn.setFont(Style.FONT_BOLD);
-        searchBtn.setBackground(Style.ACCENT);
-        searchBtn.setForeground(Color.WHITE);
-        searchBtn.setBorderPainted(false);
-        searchBtn.setFocusPainted(false);
-        searchBtn.setOpaque(true);
+        JButton searchBtn = theme.accentButton("Hledat");
         searchBtn.setBorder(new EmptyBorder(6, 14, 6, 14));
         searchBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -86,11 +90,13 @@ public class CalendarWindow extends JFrame {
         searchBtn.addActionListener(e -> doSearch.run());
         searchField.addActionListener(e -> doSearch.run());
 
+        searchPanel.add(menuBar);
         searchPanel.add(searchField);
         searchPanel.add(searchBtn);
+
         top.add(searchPanel, BorderLayout.WEST);
 
-        // ── STŘED: měsíc/rok s šipkami ──
+        //STŘED: měsíc/rok s šipkami
         JPanel monthPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 0));
         monthPanel.setOpaque(false);
 
@@ -99,7 +105,7 @@ public class CalendarWindow extends JFrame {
         JLabel  label = new JLabel(
                 DateUtils.mesic(currentMonth.getMonthValue()) + " " + currentMonth.getYear(),
                 SwingConstants.CENTER);
-        label.setFont(Style.FONT_BIG);
+        label.setFont(Theme.FONT_BIG);
         label.setForeground(Color.WHITE);
         label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         label.setBorder(new EmptyBorder(4, 14, 4, 14));
@@ -115,17 +121,11 @@ public class CalendarWindow extends JFrame {
         monthPanel.add(next);
         top.add(monthPanel, BorderLayout.CENTER);
 
-        // ── PRAVÁ STRANA: Přidej zápis ──
+        // PRAVÁ STRANA: Přidej zápis
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         right.setOpaque(false);
 
-        JButton add = new JButton("Přidej zápis");
-        add.setFont(Style.FONT_BOLD);
-        add.setBackground(Style.ACCENT);
-        add.setForeground(Color.WHITE);
-        add.setBorderPainted(false);
-        add.setFocusPainted(false);
-        add.setOpaque(true);
+        JButton add = theme.accentButton("Přidej zápis");
         add.setBorder(new EmptyBorder(6, 14, 6, 14));
         add.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         add.addActionListener(e ->
@@ -138,9 +138,9 @@ public class CalendarWindow extends JFrame {
 
     private JButton navArrow(String txt) {
         JButton b = new JButton(txt);
-        b.setFont(new Font(Style.FONT_NAME, Font.BOLD, 18));
+        b.setFont(new Font(Theme.FONT_NAME, Font.BOLD, 18));
         b.setForeground(Color.WHITE);
-        b.setBackground(Style.PRIMARY);
+        b.setBackground(theme.PRIMARY());
         b.setBorderPainted(false);
         b.setFocusPainted(false);
         b.setOpaque(true);
@@ -149,23 +149,23 @@ public class CalendarWindow extends JFrame {
         return b;
     }
 
-    // ───────────── výběr měsíce/roku ─────────────
+    //  výběr měsíce/roku
     private void pickMonthYear() {
         String[] months = new String[12];
         for (int i = 0; i < 12; i++) months[i] = DateUtils.mesic(i + 1);
         JComboBox<String> monthCb = new JComboBox<>(months);
         monthCb.setSelectedIndex(currentMonth.getMonthValue() - 1);
-        monthCb.setFont(Style.FONT_REG);
+        monthCb.setFont(Theme.FONT_REG);
 
         int yearNow = Year.now().getValue();
         List<Integer> years = new ArrayList<>();
         for (int y = yearNow - 10; y <= yearNow + 10; y++) years.add(y);
         JComboBox<Integer> yearCb = new JComboBox<>(years.toArray(new Integer[0]));
         yearCb.setSelectedItem(currentMonth.getYear());
-        yearCb.setFont(Style.FONT_REG);
+        yearCb.setFont(Theme.FONT_REG);
 
         JPanel panel = new JPanel(new GridLayout(2, 2, 8, 8));
-        panel.setBackground(Style.BG);
+        panel.setBackground(theme.BG());
         panel.setBorder(new EmptyBorder(8, 8, 8, 8));
         panel.add(new JLabel("Měsíc:"));
         panel.add(monthCb);
@@ -182,19 +182,19 @@ public class CalendarWindow extends JFrame {
         }
     }
 
-    // ───────────── mřížka dnů ─────────────
+    // mřížka dnů
     private JPanel buildGrid() {
         Map<LocalDate, List<Entry>> byDay = entriesGroupedByDay();
 
         JPanel grid = new JPanel(new GridLayout(0, 7, 8, 8));
         grid.setBorder(new EmptyBorder(14, 14, 14, 14));
-        grid.setBackground(Style.BG);
+        grid.setBackground(theme.BG());
 
         String[] days = {"Po", "Út", "St", "Čt", "Pá", "So", "Ne"};
         for (String d : days) {
             JLabel l = new JLabel(d, SwingConstants.CENTER);
-            l.setFont(Style.FONT_BOLD);
-            l.setForeground(Style.TEXT_MUTED);
+            l.setFont(Theme.FONT_BOLD);
+            l.setForeground(theme.TEXT_MUTED());
             grid.add(l);
         }
 
@@ -242,7 +242,7 @@ public class CalendarWindow extends JFrame {
         return cell;
     }
 
-    // ───────────── vlastní tlačítko dne ─────────────
+    // vlastní tlačítko dne
     private static class DayCell extends JButton {
         private final boolean hasPhotos;
 
@@ -250,26 +250,25 @@ public class CalendarWindow extends JFrame {
             super(String.valueOf(day));
             this.hasPhotos = hasPhotos;
 
-            Color bg;
-            Color fg = Style.TEXT;
+            Color bg = null;
+            Color fg = theme.TEXT();
             if (count == 0) {
-                bg = Style.SURFACE;
+                bg = theme.SURFACE();
             } else {
-                int idx = Math.min(count - 1, Style.COUNT_COLORS.length - 1);
-                bg = Style.COUNT_COLORS[idx];
-                if (idx >= 3) fg = Color.WHITE;
+                bg = theme.COUNT_COLORS(count, bg);
+                fg = theme.ACCESIBILITY(count, fg);
             }
 
             setBackground(bg);
             setForeground(fg);
-            setFont(new Font(Style.FONT_NAME, isToday ? Font.BOLD : Font.PLAIN, 16));
+            setFont(new Font(Theme.FONT_NAME, isToday ? Font.BOLD : Font.PLAIN, 16));
             setFocusPainted(false);
             setOpaque(true);
             setHorizontalAlignment(SwingConstants.LEFT);
             setVerticalAlignment(SwingConstants.TOP);
             setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(
-                            isToday ? Style.ACCENT : Style.BORDER,
+                            isToday ? theme.ACCENT() : theme.BORDER(),
                             isToday ? 2 : 1, true),
                     new EmptyBorder(6, 8, 4, 8)
             ));
@@ -279,7 +278,7 @@ public class CalendarWindow extends JFrame {
             final Color baseBg = bg;
             addMouseListener(new MouseAdapter() {
                 @Override public void mouseEntered(MouseEvent e) {
-                    setBackground(blend(baseBg, Style.ACCENT_SOFT, 0.35f));
+                    setBackground(blend(baseBg, theme.ACCENT_SOFT(), 0.35f));
                 }
                 @Override public void mouseExited(MouseEvent e) {
                     setBackground(baseBg);

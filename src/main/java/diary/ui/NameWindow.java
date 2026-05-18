@@ -7,6 +7,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.function.Consumer;
 
+import static diary.ui.Theme.theme;
+
 /**
  * První spuštění - zeptáme se na jméno uživatele.
  */
@@ -18,36 +20,36 @@ public class NameWindow extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setIconImage(Icons.calendarIcon(64));
-        Style.decorateFrame(this);
+        Theme.decorateFrame(this);
         setLayout(new BorderLayout());
 
         // 🔝 hlavička
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(Style.PRIMARY);
+        header.setBackground(theme.PRIMARY());
         header.setBorder(new EmptyBorder(18, 24, 18, 24));
         JLabel title = new JLabel("Ahoj!");
-        title.setFont(Style.FONT_HUGE);
+        title.setFont(Theme.FONT_HUGE);
         title.setForeground(Color.WHITE);
         header.add(title, BorderLayout.WEST);
         add(header, BorderLayout.NORTH);
 
         // 🔘 střed - text a vstupní pole
         JPanel center = new JPanel();
-        center.setBackground(Style.BG);
+        center.setBackground(theme.BG());
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.setBorder(new EmptyBorder(24, 28, 24, 28));
 
         JLabel intro = new JLabel("Jaké oslovení si přeješ?");
-        intro.setFont(Style.FONT_MEDIUM);
-        intro.setForeground(Style.TEXT);
+        intro.setFont(Theme.FONT_MEDIUM);
+        intro.setForeground(theme.TEXT());
         intro.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel hint = new JLabel("Tvé jméno se zobrazí při příštím přihlášení.");
-        hint.setFont(Style.FONT_SMALL);
-        hint.setForeground(Style.TEXT_MUTED);
+        hint.setFont(Theme.FONT_SMALL);
+        hint.setForeground(theme.TEXT_MUTED());
         hint.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JTextField field = Style.inputField();
+        JTextField field = Theme.inputField();
         field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
         field.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -61,10 +63,10 @@ public class NameWindow extends JFrame {
 
         // 🔽 spodní panel s tlačítkem
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 12));
-        bottom.setBackground(Style.BG);
-        bottom.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Style.BORDER));
+        bottom.setBackground(theme.BG());
+        bottom.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, theme.BORDER()));
 
-        JButton ok = Style.primaryButton("Pokračovat");
+        JButton ok = theme.primaryButton("Pokračovat");
         bottom.add(ok);
         add(bottom, BorderLayout.SOUTH);
 
@@ -72,7 +74,7 @@ public class NameWindow extends JFrame {
             String name = field.getText() == null ? "" : field.getText().trim();
             if (name.isEmpty()) {
                 field.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(Style.DANGER, 1, true),
+                        BorderFactory.createLineBorder(theme.DANGER(), 1, true),
                         new EmptyBorder(6, 10, 6, 10)
                 ));
                 return;
